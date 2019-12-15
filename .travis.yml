@@ -31,11 +31,10 @@ before_script:
     fi
 
 script:
-  - ginkgo -r -v --cover --randomizeAllSpecs --randomizeSuites --trace --progress
+  - go test -coverprofile=coverage.txt -run TestLibp2pQuicTransport -ginkgo.v -ginkgo.randomizeAllSpecs -ginkgo.trace -ginkgo.progress
+  - QUIC_GO_LOG_LEVEL=debug go test -v -run TestLibp2pTransportSuite
 
 after_success:
-  - cat go-libp2p-quic-transport.coverprofile > coverage.txt
-  - cat */*.coverprofile >> coverage.txt
   - if [ $TRAVIS_OS_NAME == "linux" ]; then
     bash <(curl -s https://codecov.io/bash) -f coverage.txt
     fi
